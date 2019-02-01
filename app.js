@@ -43,9 +43,9 @@ router.get('/', (req, res) => {
 });
 
 router.get('/home/:user', (req, res) => {
-	UserData.findOne({ id: req.body.user }).then((entry) => {
+	UserData.findOne({ _id: req.params.user }).then((entry) => {
 		if (entry != null) {
-			ProjectData.find({ user: req.body.user }).then((projects) => {
+			ProjectData.find({ 'users.user': entry.id }).then((projects) => {
 				res.render('home', { user: req.params.user, first_name: entry.first_name, projects: projects });
 			});
 		} else res.render('login', { error: "No User Found" });
@@ -162,7 +162,8 @@ app.post('/:user/addbug', (req, res) => {
 });
 
 app.post('/createproject/:user', (req, res) => {
-	UserData.findOne({ id: req.body.user }).then((entry) => {
+	UserData.findOne({ _id: req.params.user }).then((entry) => {
+		console.log(req.params.user);
 		if (entry != null) {
 			var newEntry = {
 				name: req.body.project_name,
