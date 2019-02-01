@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<a class="navbar-brand" href="#">DTS</a>
+
+	<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+		<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+			<li class="nav-item">
+				<a class="nav-link" href="/home/{{user}}">Home</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/bugs/{{user}}">Bugs</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/projects/{{user}}">Projects</a>
+			</li>
+			{{#if user}}
+			<li class="nav-item">
+				<a class="nav-link" href="/login">Log Out</a>
+			</li>
+			{{else}}
+			<li class="nav-item">
+				<a class="nav-link" href="/login">Log In</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/signup">Sign Up</a>
+			</li>
+			{{/if}}
+		</ul>
+	</div>
+</nav>

@@ -1,0 +1,92 @@
+<div class="jumbotron jumbotron-fluid">
+	<div class="container">
+		<h1 class="display-4">DTS</h1>
+		<p class="lead">Defect Tracking System</p>
+		<hr />
+		<h2>Welcome Back, {{first_name}}</h2>
+		<hr />
+		{{#each projects}}
+		<div class='card card-body text-left'>
+			<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseproj{{id}}" aria-expanded="false"
+			 aria-controls="collapseproj{{id}}">
+				<span class="font-weight-bold">{{name}} </span>
+				{{#if major_count}}
+				<span class="badge badge-danger">{{major_count}}</span>
+				{{else}}
+				<span class="badge badge-light">{{bugs.length}}</span>
+				{{/if}}
+				{{#if minor_count}}
+				<span class="badge badge-warning">{{minor_count}}</span>
+				{{else}}
+				<span class="badge badge-light">{{bugs.length}}</span>
+				{{/if}}
+				{{#if nth_count}}
+				<span class="badge badge-success">{{nth_count}}</span>
+				{{else}}
+				<span class="badge badge-light">{{bugs.length}}</span>
+				{{/if}}
+			</button>
+			<div class="collapse" id="collapseproj{{id}}">
+				<div class="card card-body">
+					{{#each bugs}}
+					<div class='card card-body text-left'>
+						<button class="btn {{#if style}}btn-{{style}}{{else}}dark{{/if}}" type="button" data-toggle="collapse" data-target="#collapsebug{{id}}" aria-expanded="false" aria-controls="collapsebug{{id}}">
+							<span class="font-weight-bold">{{name}}</span>
+						</button>
+						<div class="collapse" id="collapsebug{{id}}">
+							<div class="card card-body">
+								<p>
+									Bug Name: <span class="font-weight-bold">{{name}}</span>
+								</p>
+								<p>
+									Bug Id: <span class="font-weight-bold">{{id}}</span>
+								</p>
+								<p>
+									Description: <br /><span class="font-weight-bold">{{description}}</span>
+								</p>
+								<p>
+									Type: <span class="font-weight-bold">{{type}}</span>
+								</p>
+								<p>
+									Status: <span class="font-weight-bold">{{status}}</span>
+								</p>
+								<p>
+									Enviornment:
+								</p>
+								<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapsebugenv{{id}}" aria-expanded="false" aria-controls="collapsebugenv{{id}}">
+									<span class="font-weight-bold">Info</span>
+								</button>
+								<div class="collapse card card-body" id="collapsebugenv{{id}}">
+									<p>
+										OS: <span class="font-weight-bold">{{enviornment.os}}</span>
+									</p>
+									<p>
+										Platform: <span class="font-weight-bold">{{enviornment.platform}}</span>
+									</p>
+									<p>
+										Extra Information: <br /><span class="font-weight-bold">{{enviornment.extra}}</span>
+									</p>
+								</div>
+								<p>
+									Steps To Reproduce: <br /><span class="font-weight-bold">{{steps}}</span>
+								</p>
+								<p>
+									Reporter: <span class="font-weight-bold">{{reporter}}</span>
+								</p>
+								<p>
+									Data Reported: <span class="font-weight-bold">{{date}}</span>
+								</p>
+							</div>
+						</div>
+					</div>
+					{{else}}
+					<h3>You Have No Bugs!</h3>
+					{{/each}}
+				</div>
+			</div>
+		</div>
+		{{else}}
+		<h3>You Have No Projects</h3>
+		{{/each}}
+	</div>
+</div>
