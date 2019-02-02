@@ -30,8 +30,8 @@
 				<div class="card card-body">
 					{{#each bugs}}
 					<div class='card card-body text-left'>
-						<button class="btn {{#if style}}btn-{{style}}{{else}}dark{{/if}}" type="button" data-toggle="collapse" data-target="#collapsebug{{id}}" aria-expanded="false" aria-controls="collapsebug{{id}}">
-							<span class="font-weight-bold">{{name}}</span>
+						<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapsebug{{id}}" aria-expanded="false" aria-controls="collapsebug{{id}}">
+							<span class="font-weight-bold"> {{name}}  </span><span class="badge badge-{{#if style}}{{style}}{{else}}dark{{/if}}">{{status}}</span>
 						</button>
 						<div class="collapse" id="collapsebug{{id}}">
 							<div class="card card-body">
@@ -74,8 +74,26 @@
 									Reporter: <span class="font-weight-bold">{{reporter}}</span>
 								</p>
 								<p>
-									Data Reported: <span class="font-weight-bold">{{date}}</span>
+									Date Reported: <span class="font-weight-bold">{{date}}</span>
 								</p>
+								<div class='card card-body text-left'>
+									<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapsebuglog{{id}}" aria-expanded="false" aria-controls="collapsebuglog{{id}}">
+										<span class="font-weight-bold">Bug Log</span>
+									</button>
+									<div class="collapse" id="collapsebuglog{{id}}">
+										<div class="card card-body">
+											{{#each log}}
+												<div class="card card-body">
+													<p class="font-weight-bold">User: {{sender}}</p>
+													<p>{{message}}</p>
+													<p>{{date}}</p>
+												</div>
+											{{else}}
+												<p class="text-danger">No Log Found</p>
+											{{/each}}
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

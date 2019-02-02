@@ -1,0 +1,63 @@
+<div class="jumbotron jumbotron-fluid">
+	<div class="container">
+		<h1 class="display-4">DTS</h1>
+		<p class="lead">Defect Tracking System</p>
+		<hr />
+		<h2>Projects You Are In</h2>
+		<hr />
+		{{#each projects}}
+		<div class='card card-body text-left'>
+			<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseproj{{id}}" aria-expanded="false"
+			 aria-controls="collapseproj{{id}}">
+				<span class="font-weight-bold">{{name}} </span>
+				<span class="badge badge-light">{{users.length}}</span>
+			</button>
+			<div class="collapse" id="collapseproj{{id}}">
+				<div class="card card-body">
+					<ul class="nav justify-content-center">
+						<li class="nav-item">
+							<a class="nav-link {{#if localadmin}}{{else}}disabled{{/if}}" href="/projectadduser/{{id}}/{{../user}}">Add Users</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link {{#if localadmin}}{{else}}disabled{{/if}}" href="/projectremoveuser/{{id}}/{{../user}}">Remove Users</a>
+						</li>
+					</ul>
+					<div class='card card-body text-left'>
+						<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseusers{{id}}" aria-expanded="false" aria-controls="collapseusers{{id}}">
+							<span class="font-weight-bold">Users</span>
+						</button>
+						<div class="collapse" id="collapseusers{{id}}">
+							<div class="card card-body">
+								{{#each users}}
+									<div class="card card-body">
+										<p>
+											{{#if name}}
+												{{name}}
+											{{else}}
+												{{user}}
+											{{/if}}
+											{{#if admin}}
+												<span class="text-warning bg-dark">&#9733;</span>
+											{{else}}
+											{{/if}}
+										</p>
+										{{#if ../localadmin}}
+											<form action="/project{{#if admin}}remove{{else}}make{{/if}}admin/{{../id}}/{{../../user}}/{{user}}" method="POST">
+												<button type="submit">{{#if admin}}Revoke{{else}}Set{{/if}} Admin</button>
+											</form>
+										{{else}}
+										{{/if}}
+									</div>
+								{{else}}
+								{{/each}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{else}}
+		<h3>You Have No Projects</h3>
+		{{/each}}
+	</div>
+</div>

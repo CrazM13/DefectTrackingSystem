@@ -13,6 +13,10 @@ var ProjectDataSchema = new Schema({
 				type: String,
 				required: true
 			},
+			name: {
+				type: String,
+				required: true
+			},
 			admin: {
 				type: Boolean,
 				required: true
@@ -74,7 +78,23 @@ var ProjectDataSchema = new Schema({
 			style: {
 				type: String,
 				default: "dark"
-			}
+			},
+			log: [
+				{
+					sender: {
+						type: String,
+						required: true
+					},
+					message: {
+						type: String,
+						required: true
+					},
+					date: {
+						type: String,
+						default: new Date(Date.now()).toTimeString()
+					},
+				}
+			]
 		}
 	],
 	date: {

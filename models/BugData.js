@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var BugDataSchema = new Schema({
-
+	
 	project: {
 		type: String,
 		required: true
@@ -12,6 +12,10 @@ var BugDataSchema = new Schema({
 		required: true
 	},
 	type: {
+		type: String,
+		required: true
+	},
+	severity: {
 		type: String,
 		required: true
 	},
@@ -51,8 +55,28 @@ var BugDataSchema = new Schema({
 	},
 	date: {
 		type: String,
-		default: Date.now
-	}
+		default: new Date(Date.now()).toTimeString()
+	},
+	style: {
+		type: String,
+		default: "dark"
+	},
+	log: [
+		{
+			sender: {
+				type: String,
+				required: true
+			},
+			message: {
+				type: String,
+				required: true
+			},
+			date: {
+				type: String,
+				default: new Date(Date.now()).toTimeString()
+			},
+		}
+	]
 
 });
 

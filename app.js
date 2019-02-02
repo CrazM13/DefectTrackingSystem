@@ -64,6 +64,13 @@ router.get('/createbug/:user', (req, res) => {
 	});
 });
 
+// Route To The Search Bug Page
+router.get('/search/:user', (req, res) => {
+	ProjectData.find({ 'users.user': req.params.user }).then((projects) => {
+		res.render('bugpages/searchbug', { user: req.params.user, projects: projects});
+	});
+});
+
 // Route To The Edit Bug Page
 router.get('/editbug/:user', (req, res) => {
 	res.render('bugpages/bugmenu', { user: req.params.user });
@@ -79,9 +86,33 @@ router.get('/projects/:user', (req, res) => {
 	res.render('projectpages/projectmenu', { user: req.params.user });
 });
 
-// Route To The Projects Menu
+// Route To Create Projects
 router.get('/createproject/:user', (req, res) => {
 	res.render('projectpages/createproject', { user: req.params.user });
+});
+
+// Route To The Projects List
+router.get('/projectlist/:user', (req, res) => {
+	ProjectData.find({ 'users.user': req.params.user }).then((projects) => {
+		
+		for (var i = 0; i < projects.length; i++) {
+			for (var j = 0; j < projects[i].users.length; j++) {
+				if (req.params.user == projects[i].users[j].user) {
+					projects[i].localadmin = projects[i].users[j].admin;
+					break;
+				}
+			}
+		}
+		
+		res.render('projectpages/projectslist', { user: req.params.user, projects: projects });
+	});
+});
+
+// Route To The Projects Add Users
+router.get('/projectadduser/:project/:user', (req, res) => {
+	ProjectData.findOne({ _id: req.params.project }).then((project) => {
+		res.render('projectpages/projectadduser', { user: req.params.user, project: project });
+	});
 });
 
 
@@ -136,12 +167,18 @@ app.post('/:user/addbug', (req, res) => {
 			enviornment: {
 				os: req.body.os,
 				platform: req.body.platform,
-				extra: req.body.env_extra
+				extra: req.body.extra
 			},
 			description: req.body.description,
 			steps: req.body.steps,
 			reporter: reporter,
-			style: style
+			style: style,
+			log: [
+				{
+					sender: reporter,
+					message: "\"" + req.body.bug_name + "\" Bug Created"
+				}
+			]
 		};
 		
 		var majorCount = newEntry.severity == "major" ? 1 : 0;
@@ -154,7 +191,6 @@ app.post('/:user/addbug', (req, res) => {
 			nthCount += GetSeverityCount(project, "nth");
 
 			ProjectData.updateOne({ _id: req.body.project }, { $push: {bugs: newEntry}, $set: { major_count: majorCount, minor_count: minorCount, nth_count: nthCount } }).then((entry) => {
-				console.log(JSON.stringify(entry));
 				res.redirect('/home/' + req.params.user);
 			});
 		});
@@ -169,6 +205,7 @@ app.post('/createproject/:user', (req, res) => {
 				name: req.body.project_name,
 				users: {
 					user: entry.id,
+					name: entry.first_name + " " + entry.last_name,
 					admin: true
 				}
 			};
@@ -179,8 +216,59 @@ app.post('/createproject/:user', (req, res) => {
 	});
 });
 
+// Add User
+app.post('/project/:project/add/:user', (req, res) => {
+	UserData.findOne({ email: req.body.newuser }).then((entry) => {
+		var newEntry = {
+			user: entry.id,
+			name: entry.first_name + " " + entry.last_name,
+			admin: false
+		};
+		ProjectData.updateOne({ _id: req.params.project }, { $push: { users: newEntry }}).then((entry) => {
+			res.redirect('/projectadduser/' + req.params.project + '/' + req.params.user);
+		});
+	});
+});
+
+// Set User Admin
+app.post('/projectmakeadmin/:project/:user/:toadmin', (req, res) => {
+	ProjectData.updateOne({ _id: req.params.project, 'users.user': req.params.toadmin }, { $set: { 'users.$.admin': true } }).then((entry) => {
+		console.log(JSON.stringify(entry));
+		res.redirect('/projectlist/' + req.params.user);
+	});
+});
+
+// Set User Admin
+app.post('/projectremoveadmin/:project/:user/:toadmin', (req, res) => {
+	ProjectData.updateOne({ _id: req.params.project, 'users.user': req.params.toadmin }, { $set: { 'users.$.admin': false } }).then((entry) => {
+		res.redirect('/projectlist/' + req.params.user);
+	});
+});
+
 // Edit Bug Entry
 app.post('/:user/:id/edit', (req, res) => {
+	
+});
+
+// Seach Bugs
+app.post('/:user/searchbugs', (req, res) => {
+	var search = {}
+	
+	if (req.body.bug_name != "") search.name = req.body.bug_name;
+	if (req.body.bug_type != "") search.type = req.body.bug_type;
+	if (req.body.bug_severity != "") search.severity = req.body.bug_severity;
+	if (req.body.bug_status != "") search.status = req.body.bug_status;
+	
+	if (req.body.os != "") search.enviornment.os = req.body.os;
+	if (req.body.platform != "") search.enviornment.platform = req.body.platform;
+	
+	ProjectData.findOne({ _id: req.body.project }).then((project) => {
+		var bugsFound = []
+		
+		for (var i = 0; i < project.bugs.length; i++) if (CompareJSON(search, project.bugs[i])) bugsFound.push(project.bugs[i]);
+		
+		res.render('bugpages/searchbugresults', { user: req.params.user, bugs: bugsFound });
+	});
 	
 });
 //#endregion
@@ -212,4 +300,21 @@ function GetSeverityCount(project, severity) {
 	}
 	
 	return count;
+}
+
+function CompareJSON(obj1, obj2) {
+	var keys1 = [];
+	for (var key in obj1) keys1.push(key);
+	var keys2 = [];
+	for (var key in obj2) keys2.push(key);
+	
+	for (var i = 0; i < keys1.length; i++) {
+		for (var j = 0; j < keys2.length; j++) {
+			if (keys1[i] == keys2[j]) {
+				if (obj1[keys1[i]] != obj2[keys2[j]]) { return false;}
+			}
+		}
+	}
+	
+	return true;
 }

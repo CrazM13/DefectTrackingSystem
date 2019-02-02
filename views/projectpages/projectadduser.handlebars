@@ -1,0 +1,8 @@
+<h2>{{project.name}}</h2>
+<form action="/project/{{project.id}}/add/{{user}}" method="POST">
+	<div class="form-group">
+		<label for="newuser">New User</label>
+		<input name="newuser" type="email" class="form-control" id="newuser" placeholder="Enter email">
+	</div>
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>
