@@ -79,7 +79,12 @@ router.get('/editbug/:user/:projectid/:bugid', (req, res) => {
 			if (project.bugs[bug].id == req.params.bugid) break;
 		}
 		
-		res.render('bugpages/bugmenu', { user: req.params.user, bug: project.bugs[bug] });
+		var adminFlag = false;
+		for(var i = 0; i < project.users.length; i++) {
+			if (req.params.user == project.users[i].user) {adminFlag = project.users[i].admin; console.log(adminFlag);}
+		}
+		
+		res.render('bugpages/editbug', { user: req.params.user, bug: project.bugs[bug], project: project, localadmin: adminFlag });
 	});
 });
 
@@ -170,7 +175,7 @@ app.post('/:user/addbug', (req, res) => {
 			name: req.body.bug_name,
 			type: req.body.bug_type,
 			severity: req.body.bug_severity,
-			status: "Open",
+			status: "open",
 			enviornment: {
 				os: req.body.os,
 				platform: req.body.platform,
@@ -253,8 +258,83 @@ app.post('/projectremoveadmin/:project/:user/:toadmin', (req, res) => {
 });
 
 // Edit Bug Entry
-app.post('/:user/:id/edit', (req, res) => {
-	
+app.post('/:user/:projectid/:bugid/editbug', (req, res) => {
+	ProjectData.findOne({ _id: req.params.projectid}).then((project) => {
+		
+		var originalData;
+		var messages = [];
+		var newData = {};
+		
+		for (var i = 0; i < project.bugs.length; i++) {
+			if (req.params.bugid == project.bugs[i].id) {
+				originalData = project.bugs[i];
+			}
+		}
+		
+		if (originalData == null) console.log("NO BUG FOUND");
+		
+		newData = originalData;
+		
+		if (req.body.bug_name != originalData.name) {
+			newData.name = req.body.bug_name;
+			messages.push("Changed name from \"" + originalData.name + "\" to " + newData.name + "\"");
+		}
+		
+		if (req.body.bug_type != originalData.type) {
+			newData.type = req.body.bug_type;
+			messages.push("Changed bug type from \"" + originalData.type + "\" to " + newData.type + "\"");
+		}
+		
+		if (req.body.bug_severity != originalData.severity) {
+			newData.severity = req.body.bug_severity;
+			messages.push("Changed bug sevrity from \"" + originalData.severity + "\" to " + newData.severity + "\"");
+		}
+		
+		if (req.body.bug_status != originalData.status) {
+			newData.status = req.body.bug_status;
+			messages.push("Updated bug status from \"" + originalData.status + "\" to " + newData.status + "\"");
+		}
+		
+		if (req.body.os != originalData.enviornment.os) {
+			newData.enviornment.os = req.body.os;
+			messages.push("Changed bug OS from \"" + originalData.enviornment.os + "\" to " + newData.enviornment.os + "\"");
+		}
+		
+		if (req.body.platform != originalData.enviornment.platform) {
+			newData.enviornment.platform = req.body.platform;
+			messages.push("Changed bug platform from \"" + originalData.enviornment.platform + "\" to " + newData.enviornment.platform + "\"");
+		}
+		
+		if (req.body.extra != originalData.enviornment.extra) {
+			newData.enviornment.extra = req.body.extra;
+			messages.push("Changed extra enviornment information from \"" + originalData.enviornment.extra + "\" to " + newData.enviornment.extra + "\"");
+		}
+		
+		if (req.body.description != originalData.description) {
+			newData.description = req.body.description;
+			messages.push("Changed description from \"" + originalData.description + "\" to " + newData.description + "\"");
+		}
+		
+		if (req.body.assignee != originalData.assignee) {
+			newData.assignee = req.body.assignee;
+			messages.push("Assigned to \"" + newData.assignee + "\"");
+		}
+		
+		UserData.findOne({_id: req.params.user}).then((user) => {
+			
+			for (var i = 0; i < messages.length; i++) {
+				newData.log.push({
+					sender: user.first_name + " " + user.last_name,
+					message: messages[i]
+				});
+			}
+			
+			ProjectData.updateOne({ _id: req.params.projectid, 'bugs._id': req.params.bugid }, { $set: {'bugs.$': newData} }).then(result => {
+				console.log(JSON.stringify(newData, null, 4) + "\n\n" + JSON.stringify(result));
+				res.redirect('/home/' + req.params.user);
+			});
+		});
+	});
 });
 
 // Seach Bugs
@@ -325,3 +405,9 @@ function CompareJSON(obj1, obj2) {
 	
 	return true;
 }
+
+// Handlebars
+handlebars.registerHelper("ifequals", (obj1, obj2, options) => {
+	if (obj1 == obj2) return options.fn(this);
+	else return options.inverse(this);
+});

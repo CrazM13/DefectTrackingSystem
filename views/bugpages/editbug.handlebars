@@ -1,75 +1,90 @@
 <h2 class="text-center">Edit Bug</h2>
-<form action="/{{user}}/{{projectid}}/{{bug.id}}/editbug" method="POST">
+<form action="/{{user}}/{{project.id}}/{{bug.id}}/editbug" method="POST">
 	<div class="form-group">
 		<label for="bug_name">Name</label>
-		<input name="bug_name" type="text" class="form-control" id="bug_name" aria-describedby="bug_name" required />
+		<input name="bug_name" type="text" class="form-control" id="bug_name" aria-describedby="bug_name" value="{{bug.name}}" />
 	</div>
+	
 	<div class="form-group">
 		<label for="bug_type">Type</label>
-		<select name="bug_type" id="bug_type" class="custom-select" required>
-			<option value="" disabled selected>Select Type</option>
-			<option value="function">Function</option>
-			<option value="assignment">Assignment</option>
-			<option value="checking">Checking</option>
-			<option value="timing">Timing</option>
-			<option value="build">Build</option>
-			<option value="algorithm">Algorithm</option>
-			<option value="documentation">Documentation</option>
-			<option value="interface">Interface</option>
-			<option value="none">None</option>
-			<option value="unsure">Unsure</option>
+		<select name="bug_type" id="bug_type" class="custom-select">
+			<option value="function" {{#ifequals bug.type "function"}}selected{{else}}{{/ifequals}}>Function</option>
+			<option value="assignment" {{#ifequals bug.type "assignment"}}selected{{else}}{{/ifequals}}>Assignment</option>
+			<option value="checking" {{#ifequals bug.type "checking"}}selected{{else}}{{/ifequals}}>Checking</option>
+			<option value="timing" {{#ifequals bug.type "timing"}}selected{{else}}{{/ifequals}}>Timing</option>
+			<option value="build" {{#ifequals bug.type "build"}}selected{{else}}{{/ifequals}}>Build</option>
+			<option value="algorithm" {{#ifequals bug.type "algorithm"}}selected{{else}}{{/ifequals}}>Algorithm</option>
+			<option value="documentation" {{#ifequals bug.type "documentation"}}selected{{else}}{{/ifequals}}>Documentation</option>
+			<option value="interface" {{#ifequals bug.type "interface"}}selected{{else}}{{/ifequals}}>Interface</option>
+			<option value="none" {{#ifequals bug.type "none"}}selected{{else}}{{/ifequals}}>None</option>
+			<option value="unsure" {{#ifequals bug.type "unsure"}}selected{{else}}{{/ifequals}}>Unsure</option>
 		</select>
 	</div>
 	<div class="form-group">
 		<label for="bug_severity">Severity</label>
 		<select name="bug_severity" id="bug_severity" class="custom-select">
-			<option value="major" {{#if bug.is_major}} selected{{else}}{{/if}}>Major </option>
-			<option value="minor" {{#if bug.is_minor}} selected{{else}}{{/if}}>Minor </option>
-			<option value="nth" {{#if bug.is_nth}} selected{{else}}{{/if}}>NTH</option>
+			<option value="major" {{#ifequals bug.severity "major"}}selected{{else}}{{/ifequals}}>Major </option>
+			<option value="minor" {{#ifequals bug.severity "minor"}}selected{{else}}{{/ifequals}}>Minor </option>
+			<option value="nth" {{#ifequals bug.severity "nth"}}selected{{else}}{{/ifequals}}>NTH</option>
 		</select>
 	</div>
 	<div class="form-group">
 		<label for="bug_status">Status</label>
 		<select name="bug_status" id="bug_status" class="custom-select">
-			
+			<option value="open" {{#ifequals bug.status "open"}}selected{{else}}{{/ifequals}}>Open</option>
+			<option value="closed" {{#ifequals bug.status "closed"}}selected{{else}}{{/ifequals}}>Closed</option>
+			<option value="inprogress" {{#ifequals bug.status "inprogress"}}selected{{else}}{{/ifequals}}>In Progress</option>
+			<option value="duplicate" {{#ifequals bug.status "duplicate"}}selected{{else}}{{/ifequals}}>Duplicate</option>
+			<option value="worksasintended" {{#ifequals bug.status "worksasintended"}}selected{{else}}{{/ifequals}}>Works As Intended</option>
 		</select>
 	</div>
 	<div class="card card-bg p-4">
 		<label>Environment</label>
 		<div class="form-group">
 			<label for="os">OS</label>
-			<select name="os" type="text" id="os" class="custom-select" required>
-				<option value="windows">Windows</option>
-				<option value="mac">Mac OS</option>
-				<option value="linux">Linux</option>
-				<option value="ios">iOS</option>
-				<option value="android">Android</option>
-				<option value="other">Other</option>
+			<select name="os" type="text" id="os" class="custom-select">
+				<option value="windows" {{#ifequals bug.enviornment.os "windows"}}selected{{else}}{{/ifequals}}>Windows</option>
+				<option value="mac" {{#ifequals bug.enviornment.os "mac"}}selected{{else}}{{/ifequals}}>Mac OS</option>
+				<option value="linux" {{#ifequals bug.enviornment.os "linux"}}selected{{else}}{{/ifequals}}>Linux</option>
+				<option value="ios" {{#ifequals bug.enviornment.os "ios"}}selected{{else}}{{/ifequals}}>iOS</option>
+				<option value="android" {{#ifequals bug.enviornment.os "android"}}selected{{else}}{{/ifequals}}>Android</option>
+				<option value="other" {{#ifequals bug.enviornment.os "other"}}selected{{else}}{{/ifequals}}>Other</option>
 			</select>
 		</div>
 		<div class="form-group">
 			<label for="platform">Platform</label>
-			<select name="platform" type="text" id="platform" class="custom-select" required>
-				<option value="" disabled selected>Select Platform</option>
-				<option value="desktop">Desktop</option>
-				<option value="mobile">Mobile</option>
-				<option value="console">Console</option>
-				<option value="other">Other</option>
+			<select name="platform" type="text" id="platform" class="custom-select">
+				<option value="desktop" {{#ifequals bug.enviornment.platform "desktop"}}selected{{else}}{{/ifequals}}>Desktop</option>
+				<option value="mobile" {{#ifequals bug.enviornment.platform "mobile"}}selected{{else}}{{/ifequals}}>Mobile</option>
+				<option value="console" {{#ifequals bug.enviornment.platform "console"}}selected{{else}}{{/ifequals}}>Console</option>
+				<option value="other" {{#ifequals bug.enviornment.platform "other"}}selected{{else}}{{/ifequals}}>Other</option>
 			</select>
 		</div>
 		<div class="form-group">
 			<label for="extra">Extra Information</label>
-			<textarea name="extra" class="form-control" id="extra"></textarea>
+			<textarea name="extra" class="form-control" id="extra">{{bug.enviornment.extra}}</textarea>
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="description">Description Of The Bug</label>
-		<textarea name="description" class="form-control" id="description" required></textarea>
+		<textarea name="description" class="form-control" id="description" required>{{bug.description}}</textarea>
 	</div>
 	<div class="form-group">
 		<label for="steps">Steps to Reproduce</label>
-		<textarea name="steps" class="form-control" id="steps" required></textarea>
+		<textarea name="steps" class="form-control" id="steps" required>{{bug.steps}}</textarea>
+	</div>
+	<div class="form-group">
+		<label for="assignee">Assignee</label>
+		<select name="assignee" type="text" id="assignee" class="custom-select" {{#if localadmin}}{{else}}disabled{{/if}}>
+			<option value="">Select Assignee</option>
+			{{#each project.users}}
+				<option value="{{name}}" {{#ifequals ../bug.assignee name}}selected{{else}}{{/ifequals}}>{{name}}</option>
+			{{else}}
+			{{/each}}
+		</select>
+		
+		
 	</div>
 	<br />
-	<button type="submit" class="btn btn-primary">Submit Bug</button>
+	<button type="submit" class="btn btn-primary">Submit Changes</button>
 </form>
