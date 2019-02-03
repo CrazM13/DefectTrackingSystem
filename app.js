@@ -72,8 +72,15 @@ router.get('/search/:user', (req, res) => {
 });
 
 // Route To The Edit Bug Page
-router.get('/editbug/:user', (req, res) => {
-	res.render('bugpages/bugmenu', { user: req.params.user });
+router.get('/editbug/:user/:projectid/:bugid', (req, res) => {
+	ProjectData.findOne({ _id: req.params.projectid }).then((project) => {
+		var bug = 0;
+		for (; bug < project.bugs.length; bug++) {
+			if (project.bugs[bug].id == req.params.bugid) break;
+		}
+		
+		res.render('bugpages/bugmenu', { user: req.params.user, bug: project.bugs[bug] });
+	});
 });
 
 // Route To The Search Bug Page
@@ -267,7 +274,7 @@ app.post('/:user/searchbugs', (req, res) => {
 		
 		for (var i = 0; i < project.bugs.length; i++) if (CompareJSON(search, project.bugs[i])) bugsFound.push(project.bugs[i]);
 		
-		res.render('bugpages/searchbugresults', { user: req.params.user, bugs: bugsFound });
+		res.render('bugpages/searchbugresults', { user: req.params.user, bugs: bugsFound, projectname: project.name, projectid: req.body.project });
 	});
 	
 });

@@ -1,6 +1,6 @@
 <h2>Results</h2>
 <div class="card card-body">
-	<h3>{{projectName}}</h3>
+	<h3>{{projectname}}</h3>
 	<hr />
 	{{#each bugs}}
 		<div class='card card-body text-left'>
@@ -53,8 +53,7 @@
 						Date Reported: <span class="font-weight-bold">{{date}}</span>
 					</p>
 					<div class='card card-body text-left'>
-						<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapsebuglog{{id}}" aria-expanded="false"
-						 aria-controls="collapsebuglog{{id}}">
+						<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapsebuglog{{id}}" aria-expanded="false" aria-controls="collapsebuglog{{id}}">
 							<span class="font-weight-bold">Bug Log</span>
 						</button>
 						<div class="collapse" id="collapsebuglog{{id}}">
@@ -70,6 +69,9 @@
 								{{/each}}
 							</div>
 						</div>
+					</div>
+					<div>
+						<a class="btn btn-primary" href="/editbug/{{../user}}/{{../projectid}}/{{id}}">Edit</a>
 					</div>
 				</div>
 			</div>

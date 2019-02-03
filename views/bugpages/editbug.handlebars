@@ -1,0 +1,75 @@
+<h2 class="text-center">Edit Bug</h2>
+<form action="/{{user}}/{{projectid}}/{{bug.id}}/editbug" method="POST">
+	<div class="form-group">
+		<label for="bug_name">Name</label>
+		<input name="bug_name" type="text" class="form-control" id="bug_name" aria-describedby="bug_name" required />
+	</div>
+	<div class="form-group">
+		<label for="bug_type">Type</label>
+		<select name="bug_type" id="bug_type" class="custom-select" required>
+			<option value="" disabled selected>Select Type</option>
+			<option value="function">Function</option>
+			<option value="assignment">Assignment</option>
+			<option value="checking">Checking</option>
+			<option value="timing">Timing</option>
+			<option value="build">Build</option>
+			<option value="algorithm">Algorithm</option>
+			<option value="documentation">Documentation</option>
+			<option value="interface">Interface</option>
+			<option value="none">None</option>
+			<option value="unsure">Unsure</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="bug_severity">Severity</label>
+		<select name="bug_severity" id="bug_severity" class="custom-select">
+			<option value="major" {{#if bug.is_major}} selected{{else}}{{/if}}>Major </option>
+			<option value="minor" {{#if bug.is_minor}} selected{{else}}{{/if}}>Minor </option>
+			<option value="nth" {{#if bug.is_nth}} selected{{else}}{{/if}}>NTH</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="bug_status">Status</label>
+		<select name="bug_status" id="bug_status" class="custom-select">
+			
+		</select>
+	</div>
+	<div class="card card-bg p-4">
+		<label>Environment</label>
+		<div class="form-group">
+			<label for="os">OS</label>
+			<select name="os" type="text" id="os" class="custom-select" required>
+				<option value="windows">Windows</option>
+				<option value="mac">Mac OS</option>
+				<option value="linux">Linux</option>
+				<option value="ios">iOS</option>
+				<option value="android">Android</option>
+				<option value="other">Other</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="platform">Platform</label>
+			<select name="platform" type="text" id="platform" class="custom-select" required>
+				<option value="" disabled selected>Select Platform</option>
+				<option value="desktop">Desktop</option>
+				<option value="mobile">Mobile</option>
+				<option value="console">Console</option>
+				<option value="other">Other</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="extra">Extra Information</label>
+			<textarea name="extra" class="form-control" id="extra"></textarea>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="description">Description Of The Bug</label>
+		<textarea name="description" class="form-control" id="description" required></textarea>
+	</div>
+	<div class="form-group">
+		<label for="steps">Steps to Reproduce</label>
+		<textarea name="steps" class="form-control" id="steps" required></textarea>
+	</div>
+	<br />
+	<button type="submit" class="btn btn-primary">Submit Bug</button>
+</form>
