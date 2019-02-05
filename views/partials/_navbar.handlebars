@@ -7,13 +7,13 @@
 	<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
 		<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 			<li class="nav-item">
-				<a class="nav-link" href="/home/{{user}}">Home</a>
+				<a class="nav-link {{#if user}}{{else}}disabled{{/if}}" href="/home/{{user}}">Home</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/bugs/{{user}}">Bugs</a>
+				<a class="nav-link {{#if user}}{{else}}disabled{{/if}}" href="/bugs/{{user}}">Bugs</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/projects/{{user}}">Projects</a>
+				<a class="nav-link {{#if user}}{{else}}disabled{{/if}}" href="/projects/{{user}}">Projects</a>
 			</li>
 			{{#if user}}
 			<li class="nav-item">
