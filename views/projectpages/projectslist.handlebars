@@ -41,7 +41,7 @@
 											{{else}}
 											{{/if}}
 										</p>
-										{{#if}}
+										{{#if ../localadmin}}
 											<form action="/project{{#if admin}}remove{{else}}make{{/if}}admin/{{../id}}/{{../../user}}/{{user}}" method="POST">
 												<button type="submit">{{#if admin}}Revoke{{else}}Set{{/if}} Admin</button>
 											</form>
