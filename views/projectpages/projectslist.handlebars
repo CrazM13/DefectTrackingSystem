@@ -18,9 +18,9 @@
 						<li class="nav-item">
 							<a class="nav-link {{#if localadmin}}{{else}}disabled{{/if}}" href="/projectadduser/{{id}}/{{../user}}">Add Users</a>
 						</li>
-						<li class="nav-item">
+						<!--<li class="nav-item">
 							<a class="nav-link {{#if localadmin}}{{else}}disabled{{/if}}" href="/projectremoveuser/{{id}}/{{../user}}">Remove Users</a>
-						</li>
+						</li>-->
 					</ul>
 					<div class='card card-body text-left'>
 						<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseusers{{id}}" aria-expanded="false" aria-controls="collapseusers{{id}}">
@@ -41,12 +41,18 @@
 											{{else}}
 											{{/if}}
 										</p>
-										{{#if ../localadmin}}
-											<form action="/project{{#if admin}}remove{{else}}make{{/if}}admin/{{../id}}/{{../../user}}/{{user}}" method="POST">
-												<button type="submit">{{#if admin}}Revoke{{else}}Set{{/if}} Admin</button>
-											</form>
+										{{#ifvarsequal obj1=user obj2=../../user}}
 										{{else}}
-										{{/if}}
+											{{#if ../../localadmin}}
+											<form action="/project{{#if ../admin}}remove{{else}}make{{/if}}admin/{{../../id}}/{{../../../user}}/{{../user}}" method="POST">
+												<button type="submit">{{#if ../admin}}Revoke{{else}}Set{{/if}} Admin</button>
+											</form>
+											<form action="/projectremoveuser/{{../../id}}/{{../../../user}}/{{../user}}" method="POST">
+												<button type="submit">Remove User From Project</button>
+											</form>
+											{{else}}
+											{{/if}}
+										{{/ifvarsequal}}
 									</div>
 								{{else}}
 								{{/each}}

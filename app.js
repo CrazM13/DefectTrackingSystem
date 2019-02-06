@@ -167,7 +167,6 @@ app.post('/:user/addbug', (req, res) => {
 	console.log(req.params.user);
 	UserData.findOne({ _id: req.params.user }).then((entry) => {
 		var reporter = entry.first_name + " " + entry.last_name;
-		console.log(reporter);
 		
 		var style = req.body.bug_severity == "major" ? "danger" : req.body.bug_severity == "minor" ? "warning" : "success";
 		
@@ -211,7 +210,6 @@ app.post('/:user/addbug', (req, res) => {
 
 app.post('/createproject/:user', (req, res) => {
 	UserData.findOne({ _id: req.params.user }).then((entry) => {
-		console.log(req.params.user);
 		if (entry != null) {
 			var newEntry = {
 				name: req.body.project_name,
@@ -245,7 +243,6 @@ app.post('/project/:project/add/:user', (req, res) => {
 // Set User Admin
 app.post('/projectmakeadmin/:project/:user/:toadmin', (req, res) => {
 	ProjectData.updateOne({ _id: req.params.project, 'users.user': req.params.toadmin }, { $set: { 'users.$.admin': true } }).then((entry) => {
-		console.log(JSON.stringify(entry));
 		res.redirect('/projectlist/' + req.params.user);
 	});
 });
@@ -253,6 +250,14 @@ app.post('/projectmakeadmin/:project/:user/:toadmin', (req, res) => {
 // Set User Admin
 app.post('/projectremoveadmin/:project/:user/:toadmin', (req, res) => {
 	ProjectData.updateOne({ _id: req.params.project, 'users.user': req.params.toadmin }, { $set: { 'users.$.admin': false } }).then((entry) => {
+		res.redirect('/projectlist/' + req.params.user);
+	});
+});
+
+// Remove User From Project
+app.post('/projectremoveuser/:project/:user/:toremove', (req, res) => {
+	console.log(req.params.toremove);
+	ProjectData.updateOne({ _id: req.params.project }, { $pull: { users: { user: req.params.toremove } } }).then((entry) => {
 		res.redirect('/projectlist/' + req.params.user);
 	});
 });
@@ -330,7 +335,6 @@ app.post('/:user/:projectid/:bugid/editbug', (req, res) => {
 			}
 			
 			ProjectData.updateOne({ _id: req.params.projectid, 'bugs._id': req.params.bugid }, { $set: {'bugs.$': newData} }).then(result => {
-				console.log(JSON.stringify(newData, null, 4) + "\n\n" + JSON.stringify(result));
 				res.redirect('/home/' + req.params.user);
 			});
 		});
@@ -408,6 +412,16 @@ function CompareJSON(obj1, obj2) {
 
 // Handlebars
 handlebars.registerHelper("ifequals", (obj1, obj2, options) => {
+	
 	if (obj1 == obj2) return options.fn(this);
+	else return options.inverse(this);
+});
+
+handlebars.registerHelper("ifvarsequal", (options) => {
+
+	var obj1 = options.hash.obj1;
+	var obj2 = options.hash.obj2;
+	
+	if (obj1 == obj2) return options.fn(this); 
 	else return options.inverse(this);
 });
