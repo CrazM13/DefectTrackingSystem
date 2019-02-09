@@ -278,46 +278,46 @@ app.post('/:user/:projectid/:bugid/editbug', (req, res) => {
 		
 		if (originalData == null) console.log("NO BUG FOUND");
 		
-		newData = originalData;
+		newData = JSON.parse(JSON.stringify(originalData));
 		
 		if (req.body.bug_name != originalData.name) {
 			newData.name = req.body.bug_name;
-			messages.push("Changed name from \"" + originalData.name + "\" to " + newData.name + "\"");
+			messages.push("Changed name from \"" + originalData.name + "\" to \"" + newData.name + "\"");
 		}
 		
 		if (req.body.bug_type != originalData.type) {
 			newData.type = req.body.bug_type;
-			messages.push("Changed bug type from \"" + originalData.type + "\" to " + newData.type + "\"");
+			messages.push("Changed bug type from \"" + originalData.type + "\" to \"" + newData.type + "\"");
 		}
 		
 		if (req.body.bug_severity != originalData.severity) {
 			newData.severity = req.body.bug_severity;
-			messages.push("Changed bug sevrity from \"" + originalData.severity + "\" to " + newData.severity + "\"");
+			messages.push("Changed bug sevrity from \"" + originalData.severity + "\" to \"" + newData.severity + "\"");
 		}
 		
 		if (req.body.bug_status != originalData.status) {
 			newData.status = req.body.bug_status;
-			messages.push("Updated bug status from \"" + originalData.status + "\" to " + newData.status + "\"");
+			messages.push("Updated bug status from \"" + originalData.status + "\" to \"" + newData.status + "\"");
 		}
 		
 		if (req.body.os != originalData.enviornment.os) {
 			newData.enviornment.os = req.body.os;
-			messages.push("Changed bug OS from \"" + originalData.enviornment.os + "\" to " + newData.enviornment.os + "\"");
+			messages.push("Changed bug OS from \"" + originalData.enviornment.os + "\" to \"" + newData.enviornment.os + "\"");
 		}
 		
 		if (req.body.platform != originalData.enviornment.platform) {
 			newData.enviornment.platform = req.body.platform;
-			messages.push("Changed bug platform from \"" + originalData.enviornment.platform + "\" to " + newData.enviornment.platform + "\"");
+			messages.push("Changed bug platform from \"" + originalData.enviornment.platform + "\" to \"" + newData.enviornment.platform + "\"");
 		}
 		
 		if (req.body.extra != originalData.enviornment.extra) {
 			newData.enviornment.extra = req.body.extra;
-			messages.push("Changed extra enviornment information from \"" + originalData.enviornment.extra + "\" to " + newData.enviornment.extra + "\"");
+			messages.push("Changed extra enviornment information from \"" + originalData.enviornment.extra + "\" to \"" + newData.enviornment.extra + "\"");
 		}
 		
 		if (req.body.description != originalData.description) {
 			newData.description = req.body.description;
-			messages.push("Changed description from \"" + originalData.description + "\" to " + newData.description + "\"");
+			messages.push("Changed description from \"" + originalData.description + "\" to \"" + newData.description + "\"");
 		}
 		
 		if (req.body.assignee != originalData.assignee) {
