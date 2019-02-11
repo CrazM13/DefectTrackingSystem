@@ -13,17 +13,17 @@
 				{{#if major_count}}
 				<span class="badge badge-danger">{{major_count}}</span>
 				{{else}}
-				<span class="badge badge-light">{{bugs.length}}</span>
+				<span class="badge badge-danger">0</span>
 				{{/if}}
 				{{#if minor_count}}
 				<span class="badge badge-warning">{{minor_count}}</span>
 				{{else}}
-				<span class="badge badge-light">{{bugs.length}}</span>
+				<span class="badge badge-warning">0</span>
 				{{/if}}
 				{{#if nth_count}}
 				<span class="badge badge-success">{{nth_count}}</span>
 				{{else}}
-				<span class="badge badge-light">{{bugs.length}}</span>
+				<span class="badge badge-success">0</span>
 				{{/if}}
 			</button>
 			<div class="collapse" id="collapseproj{{id}}">

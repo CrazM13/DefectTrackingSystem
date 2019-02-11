@@ -320,7 +320,7 @@ app.post('/:user/:projectid/:bugid/editbug', (req, res) => {
 			messages.push("Changed description from \"" + originalData.description + "\" to \"" + newData.description + "\"");
 		}
 		
-		if (req.body.assignee != originalData.assignee) {
+		if (req.body.assignee != undefined && req.body.assignee != originalData.assignee) {
 			newData.assignee = req.body.assignee;
 			messages.push("Assigned to \"" + newData.assignee + "\"");
 		}
